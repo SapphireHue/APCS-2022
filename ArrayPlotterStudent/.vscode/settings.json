@@ -1,0 +1,7 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "+libs/gridgridworld.jar",
+        "+libs/gridworld.jar"
+    ]
+}

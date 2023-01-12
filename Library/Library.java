@@ -184,7 +184,10 @@ public class Library {
    //TODO complete equals method
    public boolean equals(Object obj) {
       ArrayList<Book> newLib = ((Library) obj).getBooks();
-      for(int i = 0; i < books.size() && i < newLib.size(); i++){
+      if(books.size()!=newLib.size()){
+         return false;
+      }
+      for(int i = 0; i < books.size(); i++){
          if(!books.get(i).equals(newLib.get(i))){
             return false;
          }

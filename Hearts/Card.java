@@ -1,4 +1,4 @@
-public class Card {
+public class Card implements Comparable<Object> {
     private String name, suit;
     private int rank;
 
@@ -37,29 +37,26 @@ public class Card {
         rank = r;
     }
 
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
         Card c = (Card) obj;
-        return(name.equals(c.getName()) && suit.equals(c.getSuit()) && rank == c.getRank());
+        return (name.equals(c.getName()) && suit.equals(c.getSuit()) && rank == c.getRank());
     }
 
-    public int compareTo(Object obj){
+    public int compareTo(Object obj) {
         Card c = (Card) obj;
         String suitOrder = "diamonds hearts spades clubs";
-        if(equals(c)){
-           return 0; 
-        }
-        else if(suitOrder.indexOf(suit) > suitOrder.indexOf(c.getSuit())){
+        if (equals(c)) {
+            return 0;
+        } else if (suitOrder.indexOf(suit) > suitOrder.indexOf(c.getSuit())) {
             return 1;
-        }
-        else if(suitOrder.indexOf(suit) < suitOrder.indexOf(c.getSuit())){
+        } else if (suitOrder.indexOf(suit) < suitOrder.indexOf(c.getSuit())) {
             return -1;
-        }
-        else{
-            return (rank-c.getRank())/Math.abs(rank-c.getRank());
+        } else {
+            return (rank - c.getRank()) / Math.abs(rank - c.getRank());
         }
     }
 
-    public String toString(){
-        return (suit.charAt(0)+name+"("+rank+")");
+    public String toString() {
+        return (suit.charAt(0) + name + "(" + rank + ")");
     }
 }

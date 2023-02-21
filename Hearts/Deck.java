@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import java.util.Collections;
 public class Deck {
     private ArrayList<Card> deck;
     public static final String[] NAMES = { "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A" };
@@ -37,9 +37,13 @@ public class Deck {
     }
 
     public void shuffle() {
+        Collections.shuffle(deck);
+    }
+
+    public void shuffle2() {
         int numCards = (int) (Math.random() * 9) + 2;
-        int insertAt = (int) (Math.random()*(52-numCards)+numCards);
-        for(int i = 0; i < numCards; i++){
+        int insertAt = (int) (Math.random() * (52 - numCards) + numCards);
+        for (int i = 0; i < numCards; i++) {
             deck.add(insertAt, deck.remove(0));
         }
     }

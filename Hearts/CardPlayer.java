@@ -29,9 +29,8 @@ public class CardPlayer extends Player {
     }
 
     public void setTakenCards(ArrayList<Card> takenCards) {
-        for (Card card : takenCards) {
-            this.takenCards.add(card);
-        }
+        this.takenCards.clear();
+        this.takenCards.addAll(takenCards);
     }
 
     public void addCard(Card card) {
@@ -42,7 +41,7 @@ public class CardPlayer extends Player {
         return (hand.remove(index));
     }
 
-    public Card chooseCard(ArrayList<Card> round, ArrayList<Card> previousRound) {
+    public Card chooseCard(ArrayList<Card> round, ArrayList<Card> previousRounds) {
         Card twoClub = new Card("2", "clubs", 2);
         if (hand.contains(twoClub)) {
             return playCard(hand.indexOf(twoClub));

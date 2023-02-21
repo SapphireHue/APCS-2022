@@ -6,7 +6,7 @@ public class CardPlayerLevel1 extends CardPlayer {
         super(name, score, hand);
     }
 
-    public Card chooseCard(ArrayList<Card> round, ArrayList<Card> previousRound) {
+    public Card chooseCard(ArrayList<Card> round, ArrayList<Card> previousRounds) {
         if (round.size() != 0) {
             String targetSuit = round.get(0).getSuit();
 
@@ -48,6 +48,6 @@ public class CardPlayerLevel1 extends CardPlayer {
             return playCard((int) (Math.random() * super.getHand().size()));
 
         }
-        return super.chooseCard(round, previousRound);
+        return super.chooseCard(round, previousRounds);
     }
 }

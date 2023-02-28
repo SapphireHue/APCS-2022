@@ -3,7 +3,7 @@ public class CardGameRunner {
         String[] playerNames = { "Rio", "Jose", "Saachi", "Ashley" };
         CardGame game = new CardGame("Hi", 4, playerNames, 0);
         int badPoints = 0;
-        for (int gameNum = 0; gameNum < 1000; gameNum++) {
+        for (int gameNum = 0; gameNum < 20000; gameNum++) {
             badPoints+=26;
             game.getDeckOfCards().initializeDeck();
             // for (int i = 0; i < 10; i++) {

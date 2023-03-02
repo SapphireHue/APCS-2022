@@ -11,9 +11,9 @@ public class CardGame {
         deckOfCards = new Deck();
         nameOfGame = name;
         this.players = new ArrayList<CardPlayer>();
-        this.players.add(new CardPlayerLevel2(players[0], 0, new ArrayList<Card>()));
+        this.players.add(new CardPlayerLevel3(players[0], 0, new ArrayList<Card>()));
         for (int i = 1; i < 4; i++) {
-            this.players.add(new CardPlayer(players[i], 0, new ArrayList<Card>()));
+            this.players.add(new CardPlayerLevel1(players[i], 0, new ArrayList<Card>()));
         }
         // this.players.add(new CardPlayerLevel1(players[0], 0, new ArrayList<Card>()));
         // for (int i = 1; i < 4; i++) {

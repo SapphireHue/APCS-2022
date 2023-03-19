@@ -1,110 +1,79 @@
+// Stopped trying to find a way to optimize and resorted to brute force!
+// Praying it doesn't crash anything!
+// Sean (Clarke) was talking about a trick they learned in AMR for getting every possible subset of a set and something pinged in the back of my brain
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class Candela {
     public static void main(String[] args) throws FileNotFoundException {
         File inputFile = new File("candela.dat");
         Scanner fileScan = new Scanner(inputFile);
         int numQuestions = fileScan.nextInt();
-        int[][] questions = new int[numQuestions][3]; // [question #, points, difficulty]
-        int[][] orderedQuestions = new int[numQuestions][2];
+        int[][] orderedQuestions = new int[numQuestions][2]; // [points, difficulty]
         for (int i = 0; i < numQuestions; i++) {
-            questions[i][0] = i + 1;
-            orderedQuestions[i][0] = questions[i][1] = fileScan.nextInt();
-            orderedQuestions[i][1] = questions[i][2] = fileScan.nextInt();
+            orderedQuestions[i][0] = fileScan.nextInt();
+            orderedQuestions[i][1] = fileScan.nextInt();
         }
 
-        // sort the array; prioritize ratio of points/difficulty, ties broken with greater point value
-        Arrays.sort(questions, new Comparator<int[]>() { // points
-            public int compare(int[] a, int[] b) {
-                return Double.compare(b[1], a[1]); // b and then a bc greatest points should come first in list
+        // find all combinations
+        int numCombinations = (int) Math.pow(2, numQuestions);
+        Object[][] combinations = new Object[numCombinations - 1][3]; // [combinationString, points, difficulty]
+        for (int i = 1; i < numCombinations; i++) { // for each possible combination
+            String combinationString = Integer.toBinaryString(i);
+            combinationString = String.format("%" + numQuestions + "s", combinationString).replace(" ", "0");
+            int points = 0;
+            int difficulty = 0;
+            for (int questionNum = 0; questionNum < combinationString.length(); questionNum++) { // for each question
+                if (combinationString.charAt(questionNum) == '1') {
+                    points += orderedQuestions[questionNum][0];
+                    difficulty += orderedQuestions[questionNum][1];
+                }
             }
-        });
-        Arrays.sort(questions, new Comparator<int[]>() { // ratio
-            public int compare(int[] a, int[] b) {
-                return Double.compare(b[1] / (double) b[2], a[1] / (double) a[2]); // b and then a bc greatest ratio should come first in list
+            combinations[i - 1][0] = combinationString;
+            combinations[i - 1][1] = points;
+            combinations[i - 1][2] = difficulty;
+        }
+
+        // sort every possible combination by ascending difficulty
+        Arrays.sort(combinations, new Comparator<Object[]>() {
+            public int compare(Object[] a, Object[] b) {
+                return Double.compare((int) a[2], (int) b[2]);
             }
         });
 
         while (fileScan.hasNextInt()) {
             int targetDiff = fileScan.nextInt();
-            String[] testInfo = calculateDifficulty(targetDiff, questions);
-
-            String[] temp = testInfo[0].split(" ");
-            int[] questionNumbers = new int[temp.length];
-            for (int i = 0; i < temp.length; i++) {
-                questionNumbers[i] = Integer.parseInt(temp[i]);
+            int combinationNum = 0; // position in list combinations
+            // int maxPoints = 0;
+            int bestCombinationNum = 0;
+            while (combinationNum < combinations.length && (int) combinations[combinationNum][2] <= targetDiff) {
+                if ((int) combinations[combinationNum][1] > (int) combinations[bestCombinationNum][1]) {
+                    bestCombinationNum = combinationNum;
+                }
+                combinationNum++;
             }
-
-            printOutput(questionNumbers, Integer.parseInt(testInfo[1]), Integer.parseInt(testInfo[2]), targetDiff,
-                    orderedQuestions);
+            printOutput(targetDiff, (int) combinations[bestCombinationNum][2],
+                    (int) combinations[bestCombinationNum][1],
+                    combinations[bestCombinationNum][0].toString(), orderedQuestions);
             System.out.println("=====");
         }
     }
 
-    // should these be methods? probably not, since I keep having to pass in questions 
-    public static String[] calculateDifficulty(int target, int[][] questions) {
-        String questionsToDo = "";
-        int difficulty = 0;
-        int points = 0;
-
-        // first pass
-        int[][] temp = new int[questions.length][3];
-        int i = 0;
-        int lastIndex = 0;
-        for (int x = 0; x < questions.length; x++) {
-            if (difficulty + questions[x][2] <= target) {
-                questionsToDo += questions[x][0] + " ";
-                points += questions[x][1];
-                difficulty += questions[x][2];
-
-                temp[i] = questions[x];
-                lastIndex = x;
-                i++;
-            }
-        }
-
-        // check for better ways
-        if (lastIndex != questions.length && !questionsToDo.equals("")) {
-            /* print2d(temp);
-            System.out.println("-");
-            System.out.println(Arrays.toString(questions[lastIndex])); */
-            int tempDiff = 0;
-            int tempPoints = 0;
-            String tempQuestionsToDo = "";
-            // calculate temp values
-            for (int x = 0; x < lastIndex; x++) {
-                tempQuestionsToDo += temp[x][0] + " ";
-                tempPoints += temp[x][1];
-                tempDiff += temp[x][2];
-            }
-            /* System.out.println(tempPoints);
-            System.out.println(tempDiff); */
-            // check if there's another value that gives higher points
-            String[] calc = calculateDifficulty(target - tempDiff,
-                    Arrays.copyOfRange(questions, lastIndex + 1, questions.length));
-            /* System.out.println(Arrays.toString(calc)); */
-            if (Integer.parseInt(calc[2]) > questions[lastIndex][1]) {
-                difficulty = tempDiff + Integer.parseInt(calc[1]);
-                points = tempPoints + Integer.parseInt(calc[2]);
-                questionsToDo = tempQuestionsToDo + calc[0];
-            }
-        }
-        String[] output = { questionsToDo, Integer.toString(difficulty), Integer.toString(points) };
-        return output;
-    }
-
-    public static void printOutput(int[] questionNumbers, int difficulty, int points, int target, int questions[][]) {
+    public static void printOutput(int target, int difficulty, int points, String combinationString,
+            int[][] questions) {
         System.out.println("Target diff     = " + target);
         System.out.println("Calculated diff = " + difficulty);
         System.out.println("Expected points = " + points);
-        Arrays.sort(questionNumbers);
-        for (int num : questionNumbers) {
-            System.out.printf("Q#%2d, %2d pts, diff%2d%n", num, questions[num - 1][0], questions[num - 1][1]);
+        for (int num = 0; num < combinationString.length(); num++) { // for each question
+            if (combinationString.charAt(num) == '1') {
+                System.out.printf("Q#%2d, %2d pts, diff%2d%n", num+1, questions[num][0], questions[num][1]);
+            }
         }
+
     }
 
     public static void print2d(int[][] matrix) {

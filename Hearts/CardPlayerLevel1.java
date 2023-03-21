@@ -7,6 +7,10 @@ public class CardPlayerLevel1 extends CardPlayer {
     }
 
     public Card chooseCard(ArrayList<Card> round, ArrayList<Card> previousRounds) {
+        Card twoClub = new Card("2", "clubs", 2);
+        if (super.getHand().contains(twoClub)) {
+            return playCard(super.getHand().indexOf(twoClub));
+        }
         if (round.size() != 0) {
             String targetSuit = round.get(0).getSuit();
 

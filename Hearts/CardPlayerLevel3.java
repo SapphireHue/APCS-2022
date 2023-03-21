@@ -4,12 +4,17 @@ import java.util.Collections;
 
 public class CardPlayerLevel3 extends CardPlayer {
     private static final Card Qs = new Card("Q", "spades", 12);
+    private static final Card C2 = new Card("2", "clubs", 2);
 
     public CardPlayerLevel3(String name, int score, ArrayList<Card> hand) {
         super(name, score, hand);
     }
 
     public Card chooseCard(ArrayList<Card> round, ArrayList<Card> previousRounds) {
+        if (super.getHand().contains(C2)) {
+            return playCard(super.getHand().indexOf(C2));
+        }
+
         if (round.size() != 0) {
             String targetSuit = round.get(0).getSuit();
 

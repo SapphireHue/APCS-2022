@@ -11,8 +11,12 @@ public class CardGame {
         deckOfCards = new Deck();
         nameOfGame = name;
         this.players = new ArrayList<CardPlayer>();
-        this.players.add(new CardPlayerLevel3(players[0], 0, new ArrayList<Card>()));
-        for (int i = 1; i < 4; i++) {
+        
+        // this.players.add(new CardPlayerMueller2022("Mueller", 0, new ArrayList<Card>()));
+        this.players.add(new CardPlayerSaffron("Saffron", 0, new ArrayList<Card>()));
+        this.players.add(new CardPlayerMueller2022("Mueller", 0, new ArrayList<Card>()));
+        
+        for (int i = 2; i < 4; i++) {
             this.players.add(new CardPlayerLevel1(players[i], 0, new ArrayList<Card>()));
         }
         // this.players.add(new CardPlayerLevel1(players[0], 0, new ArrayList<Card>()));
@@ -31,6 +35,7 @@ public class CardGame {
 
     public void playGame() {
         setUpGame();
+        // int toReturn = currentPlayer;
         ArrayList<Card> cardsPlayed = new ArrayList<Card>();
         for (int i = 0; i < 13; i++) { // 13 rounds
             ArrayList<Card> trick = playRound(cardsPlayed);
@@ -47,6 +52,7 @@ public class CardGame {
         for (CardPlayer player : players) {
             player.updateScore(calculateScore(player.getTakenCards()));
         }
+        // return toReturn;
     }
 
     public void setUpGame() {
@@ -66,13 +72,15 @@ public class CardGame {
     }
 
     public ArrayList<Card> playRound(ArrayList<Card> previousRounds) {
+        // System.out.println(this);
         ArrayList<Card> thisRound = new ArrayList<Card>();
         int player = currentPlayer; // 
         for (int i = 0; i < 4; i++) {
             thisRound.add(players.get(player % numberOfPlayers).chooseCard(thisRound, previousRounds));
+            // System.out.println(players.get(player % numberOfPlayers).getName() + " played " + thisRound.get(i));
             player += 1;
         }
-        checkRound(thisRound, currentPlayer);
+        //checkRound(thisRound, currentPlayer);
         return thisRound;
     }
 

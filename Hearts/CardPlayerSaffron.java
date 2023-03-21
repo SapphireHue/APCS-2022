@@ -86,7 +86,6 @@ public class CardPlayerSaffron extends CardPlayer {
             return playCard(super.getHand().indexOf(highestCardByValue(super.getHand())));
 
         }
-        // TODO: play the highest starting card that won't result in hazards being taken
         return playCard(super.getHand().indexOf(chooseStartingCard(previousRounds)));
     }
 
@@ -107,15 +106,15 @@ public class CardPlayerSaffron extends CardPlayer {
     private Card highestSafeCard(ArrayList<Card> setOfOneSuit, Card targetCard) {
         Card myCard = null;
         for (Card card : setOfOneSuit) {
-            if (card.compareTo(targetCard) < 0) {
+            if (card.compareTo(targetCard) < 0) { // if card is less than target
                 if (myCard == null) {
                     myCard = card;
-                } else if (card.compareTo(myCard) < 0) {
+                } else if (card.compareTo(myCard) > 0) { // if card is less than target AND greater then currently planned card
                     myCard = card;
                 }
             }
         }
-        return null;
+        return myCard;
     }
 
     /**
@@ -186,6 +185,7 @@ public class CardPlayerSaffron extends CardPlayer {
         }
 
         if(playables.size()>0){
+            // TODO: play the highest starting card that won't result in hazards being taken
             return lowestCardByValue(playables);
         }
         

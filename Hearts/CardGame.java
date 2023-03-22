@@ -12,13 +12,15 @@ public class CardGame {
         nameOfGame = name;
         this.players = new ArrayList<CardPlayer>();
         
-        // this.players.add(new CardPlayerMueller2022("Mueller", 0, new ArrayList<Card>()));
+        this.players.add(new CardPlayerMueller2022("Mueller", 0, new ArrayList<Card>()));
         this.players.add(new CardPlayerSaffron("Saffron", 0, new ArrayList<Card>()));
         this.players.add(new CardPlayerMueller2022("Mueller", 0, new ArrayList<Card>()));
+        this.players.add(new CardPlayerSaffron("Saffron", 0, new ArrayList<Card>()));
+        // this.players.add(new CardPlayerMueller2022("Mueller", 0, new ArrayList<Card>()));
         
-        for (int i = 2; i < 4; i++) {
-            this.players.add(new CardPlayerLevel1(players[i], 0, new ArrayList<Card>()));
-        }
+        // for (int i = 2; i < 4; i++) {
+        //     this.players.add(new CardPlayerLevel1(players[i], 0, new ArrayList<Card>()));
+        // }
         // this.players.add(new CardPlayerLevel1(players[0], 0, new ArrayList<Card>()));
         // for (int i = 1; i < 4; i++) {
         //     this.players.add(new CardPlayer(players[i], 0, new ArrayList<Card>()));

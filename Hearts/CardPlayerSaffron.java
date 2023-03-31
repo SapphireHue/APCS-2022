@@ -157,8 +157,8 @@ public class CardPlayerSaffron extends CardPlayer {
         playables.addAll(super.getHand());
         ArrayList<Card> spades = cardsOfSuit("spades", super.getHand());
         // ArrayList<Card> unknownSpades = cardsOfSuit("spades", unknownCards);
-        if(!previousRounds.contains(Qs)){
-            if(!spades.contains(Qs) && spades.size() > 0){ // if the queen hasn't been played yet, you don't have it, and you have other spades
+        if (!previousRounds.contains(Qs)) {
+            if (!spades.contains(Qs) && spades.size() > 0) { // if the queen hasn't been played yet, you don't have it, and you have other spades
                 // try to flush it out with the highest card lower than Q
                 for (int i = spades.size() - 1; i >= 0; i--) {
                     if (spades.get(i).getRank() < 13) {
@@ -166,12 +166,12 @@ public class CardPlayerSaffron extends CardPlayer {
                     }
                 }
                 playables.removeAll(spades);
-            }
-            else{
+            } else { // if you have the queen, don't play spades
                 playables.removeAll(spades);
             }
         }
 
+        // play the highest safe heart
         ArrayList<Card> hearts = cardsOfSuit("hearts", super.getHand());
         ArrayList<Card> unknownHearts = cardsOfSuit("hearts", unknownCards);
         if (hearts.size() > 0) {
@@ -184,12 +184,14 @@ public class CardPlayerSaffron extends CardPlayer {
             }
         }
 
-        if(playables.size()>0){
-            // TODO: play the highest starting card that won't result in hazards being taken
-            return lowestCardByValue(playables);
+        if (playables.size() == 0) {
+            return lowestCardByValue(super.getHand());
         }
-        
-        return lowestCardByValue(super.getHand());
+
+        // TODO: play the highest starting card that won't result in hazards being taken
+
+        return lowestCardByValue(playables);
+
     }
 
     private ArrayList<Card> cardsOfSuit(String targetSuit, ArrayList<Card> toSearch) {

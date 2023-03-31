@@ -5,6 +5,7 @@
     "java.dependency.syncWithFolderExplorer": false,
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "mueller.jar"
+        "mueller.jar",
+        "Saachi.jar"
     ]
 }

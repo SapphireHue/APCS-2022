@@ -1,3 +1,9 @@
+/*
+ * PRECONDITIONS
+ * - Same folder as CardPlayer class files
+ * - CardPlayers are named CardPlayerStudentName.class
+ * - No two CardPlayers share the same name
+*/
 import java.io.File;
 import java.io.FilenameFilter;
 import java.lang.reflect.Constructor;
@@ -74,17 +80,26 @@ public class HeartsTournament {
                 ArrayList<CardPlayer> roundPlayers = game.getPlayers();
                 players.get(player1).updatePoints(roundPlayers.get(0).getScore() + roundPlayers.get(2).getScore());
                 players.get(player2).updatePoints(roundPlayers.get(1).getScore() + roundPlayers.get(3).getScore());
+
+                // doesn't account for ties
+                if(roundPlayers.get(0).getScore() + roundPlayers.get(2).getScore() < roundPlayers.get(1).getScore() + roundPlayers.get(3).getScore()){
+                    players.get(player1).incrementWins();
+                }
+                else if (roundPlayers.get(0).getScore() + roundPlayers.get(2).getScore() > roundPlayers.get(1).getScore() + roundPlayers.get(3).getScore()){
+                    players.get(player2).incrementWins();
+                }
             }
         }
         int i = 1;
         System.out.println("***LEADERBOARD***");
+        // System.out.printf("%-3s %-20s %10s %10s%n", "", "Player", "Total Points", "Match-ups Won");
         Collections.sort(players, new Comparator<Competitor>() {
             public int compare(Competitor a, Competitor b){
                 return Integer.compare(a.getPoints(), b.getPoints());
             }
         });
         for(Competitor player : players){
-            System.out.printf("%-3s %-20s %10d%n", i++ + ".", player.getName(), player.getPoints());
+            System.out.printf("%-3s %-20s %10d %10d%n", i++ + ".", player.getName(), player.getPoints(), player.getWins());
         }
     }
 }

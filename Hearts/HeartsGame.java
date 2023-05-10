@@ -1,3 +1,5 @@
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -11,10 +13,27 @@ public class HeartsGame {
         deckOfCards = new Deck();
         nameOfGame = name;
         numberOfPlayers = 4;
-        this.currentPlayer = (int) (Math.random() * 4);
+        this.currentPlayer = (int) (Math.random() * numberOfPlayers);
 
         this.players = new ArrayList<CardPlayer>();
         this.players.addAll(players);
+    }
+
+    public HeartsGame(Competitor competitor1, Competitor competitor2) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        deckOfCards = new Deck();
+        numberOfPlayers = 4;
+        this.currentPlayer = (int) (Math.random() * numberOfPlayers);
+
+        this.players = new ArrayList<CardPlayer>();
+        Constructor<CardPlayer> constructor1 = competitor1.getConstructor();
+        Constructor<CardPlayer> constructor2 = competitor2.getConstructor();
+        String name1 = competitor1.getName();
+        String name2 = competitor2.getName();
+        nameOfGame = String.format("Hearts Tournament: %s vs %s", name1, name2);
+        players.add(constructor1.newInstance(name1 + 1, 0, new ArrayList<Card>()));
+        players.add(constructor2.newInstance(name2 + 1, 0, new ArrayList<Card>()));
+        players.add(constructor1.newInstance(name1 + 2, 0, new ArrayList<Card>()));
+        players.add(constructor2.newInstance(name2 + 2, 0, new ArrayList<Card>()));
     }
 
     public void deal(int numCards, int player) {

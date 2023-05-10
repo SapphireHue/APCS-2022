@@ -3,6 +3,8 @@ import java.io.FilenameFilter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class HeartsTournament {
     static int numGames = 20000;
@@ -52,7 +54,8 @@ public class HeartsTournament {
         if (printMatches) {
             System.out.println("***" + game.getNameOfGame() + "***");
             for (CardPlayer player : game.getPlayers()) {
-                System.out.printf("%s %.2f%%    ", player.getName(), (player.getScore() / (double) badPoints) * 100);
+                // System.out.printf("%s %.2f%%    ", player.getName(), (player.getScore() / (double) badPoints) * 100);
+                System.out.printf("%s %d    ", player.getName(), player.getScore());
             }
             System.out.println();
             System.out.println();
@@ -61,30 +64,27 @@ public class HeartsTournament {
 
     public static void main(String[] args)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Competitor[] players = getPlayers(
-                ClassLoader.getSystemClassLoader().getResource("").getPath())
-                .toArray(new Competitor[0]);
-        for (int firstPlayer = 0; firstPlayer < players.length - 1; firstPlayer++) {
-            Competitor player1 = players[firstPlayer];
-            Constructor<CardPlayer> constructor1 = player1.getConstructor();
-            String name1 = player1.getName();
-            for (int secondPlayer = firstPlayer + 1; secondPlayer < players.length; secondPlayer++) {
-                Competitor player2 = players[secondPlayer];
-                Constructor<CardPlayer> constructor2 = player2.getConstructor();
-                String name2 = player2.getName();
-                ArrayList<CardPlayer> roundPlayers = new ArrayList<CardPlayer>(4);
-
-                roundPlayers.add(constructor1.newInstance(name1 + 1, 0, new ArrayList<Card>()));
-                roundPlayers.add(constructor2.newInstance(name2 + 1, 0, new ArrayList<Card>()));
-                roundPlayers.add(constructor1.newInstance(name1 + 2, 0, new ArrayList<Card>()));
-                roundPlayers.add(constructor2.newInstance(name2 + 2, 0, new ArrayList<Card>()));
-
-                HeartsGame game = new HeartsGame(String.format("Hearts Tournament: %s vs %s", name1, name2),
-                        roundPlayers);
-                
+        ArrayList<Competitor> players = getPlayers(
+                ClassLoader.getSystemClassLoader().getResource("").getPath());
+        for (int player1 = 0; player1 < players.size() - 1; player1++) {
+            for (int player2 = player1 + 1; player2 < players.size(); player2++) {
+                HeartsGame game = new HeartsGame(players.get(player1), players.get(player2));
                 runGames(game);
-                
+
+                ArrayList<CardPlayer> roundPlayers = game.getPlayers();
+                players.get(player1).updatePoints(roundPlayers.get(0).getScore() + roundPlayers.get(2).getScore());
+                players.get(player2).updatePoints(roundPlayers.get(1).getScore() + roundPlayers.get(3).getScore());
             }
+        }
+        int i = 1;
+        System.out.println("***LEADERBOARD***");
+        Collections.sort(players, new Comparator<Competitor>() {
+            public int compare(Competitor a, Competitor b){
+                return Integer.compare(a.getPoints(), b.getPoints());
+            }
+        });
+        for(Competitor player : players){
+            System.out.printf("%-3s %-20s %10d%n", i++ + ".", player.getName(), player.getPoints());
         }
     }
 }

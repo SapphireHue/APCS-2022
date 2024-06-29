@@ -1,3 +1,4 @@
+
 /*
  * PRECONDITIONS
  * - Same folder as CardPlayer class files
@@ -60,8 +61,8 @@ public class HeartsTournament {
         if (printMatches) {
             System.out.println("***" + game.getNameOfGame() + "***");
             for (CardPlayer player : game.getPlayers()) {
-                // System.out.printf("%s %.2f%%    ", player.getName(), (player.getScore() / (double) badPoints) * 100);
-                System.out.printf("%s %d    ", player.getName(), player.getScore());
+                // System.out.printf("%s %.2f%%", player.getName(), (player.getScore() / (double) badPoints) * 100);
+                System.out.printf("%s %d", player.getName(), player.getScore());
             }
             System.out.println();
             System.out.println();
@@ -82,10 +83,11 @@ public class HeartsTournament {
                 players.get(player2).updatePoints(roundPlayers.get(1).getScore() + roundPlayers.get(3).getScore());
 
                 // doesn't account for ties
-                if(roundPlayers.get(0).getScore() + roundPlayers.get(2).getScore() < roundPlayers.get(1).getScore() + roundPlayers.get(3).getScore()){
+                if (roundPlayers.get(0).getScore() + roundPlayers.get(2).getScore() < roundPlayers.get(1).getScore()
+                        + roundPlayers.get(3).getScore()) {
                     players.get(player1).incrementWins();
-                }
-                else if (roundPlayers.get(0).getScore() + roundPlayers.get(2).getScore() > roundPlayers.get(1).getScore() + roundPlayers.get(3).getScore()){
+                } else if (roundPlayers.get(0).getScore() + roundPlayers.get(2).getScore() > roundPlayers.get(1)
+                        .getScore() + roundPlayers.get(3).getScore()) {
                     players.get(player2).incrementWins();
                 }
             }
@@ -94,12 +96,13 @@ public class HeartsTournament {
         System.out.println("***LEADERBOARD***");
         // System.out.printf("%-3s %-20s %10s %10s%n", "", "Player", "Total Points", "Match-ups Won");
         Collections.sort(players, new Comparator<Competitor>() {
-            public int compare(Competitor a, Competitor b){
+            public int compare(Competitor a, Competitor b) {
                 return Integer.compare(a.getPoints(), b.getPoints());
             }
         });
-        for(Competitor player : players){
-            System.out.printf("%-3s %-20s %10d %10d%n", i++ + ".", player.getName(), player.getPoints(), player.getWins());
+        for (Competitor player : players) {
+            System.out.printf("%-3s %-20s %10d %10d%n", i++ + ".", player.getName(), player.getPoints(),
+                    player.getWins());
         }
     }
 }
